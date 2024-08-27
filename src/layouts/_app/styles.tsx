@@ -12,6 +12,7 @@ type SidePanelProps = {
     name: string
     price: number
   }>
+  close: () => void
 }
 
 export function Container({ children }: Props) {
@@ -30,12 +31,17 @@ export function Header({ children }: Props) {
   )
 }
 
-export function SidePanel({ isOpen, items }: SidePanelProps) {
+export function SidePanel({ isOpen, items, close }: SidePanelProps) {
+  const itemsSize = items.length
+  const itemsTotal = items.reduce((acc, ele) => {
+    return acc + ele.price
+  }, 0)
+
   return (
     <div
       className={`flex flex-col fixed top-0 right-0 h-full w-[500px] bg-elements shadow-2xl transition-transform transform z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
     >
-      <X />
+      <X onClick={() => close()} />
       <h2 className="p-4 text-xl font-semibold border-b">Sacola de compras</h2>
       <div className="overflow-y-auto no-scrollbar">
         {items.map((item, index) => (
@@ -51,6 +57,22 @@ export function SidePanel({ isOpen, items }: SidePanelProps) {
             </div>
           </div>
         ))}
+
+        <div className="flex flex-col">
+          <div className="flex flex-row">
+            <p>Quantidade</p>
+
+            <span>
+              {itemsSize} {itemsSize === 1 ? 'item' : 'itens'}
+            </span>
+          </div>
+
+          <div className="flex flex-row">
+            <p>Valor total</p>
+
+            <span>{itemsTotal}</span>
+          </div>
+        </div>
       </div>
     </div>
   )

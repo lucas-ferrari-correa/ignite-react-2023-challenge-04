@@ -59,7 +59,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         />
       )}
 
-      <SidePanel items={items} isOpen={isOpen} />
+      <SidePanel items={items} isOpen={isOpen} close={handleSidePanelClose} />
 
       {children}
     </Container>
