@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 import logoImg from '@/assets/Logo.svg'
-import shirt1 from '@/assets/shirts/Shirt-1.svg'
 import { Button } from '@/components/ui/button'
+import { useCart } from '@/providers/cart-provider'
 
 import { Container, Header, SidePanel } from './styles'
 
@@ -14,25 +14,9 @@ type AppLayoutProps = {
   children: React.ReactNode
 }
 
-const items = [
-  {
-    imageUrl: shirt1,
-    name: 'Camisa 1',
-    price: 20,
-  },
-  {
-    imageUrl: shirt1,
-    name: 'Camisa 2',
-    price: 30,
-  },
-  {
-    imageUrl: shirt1,
-    name: 'Camisa 2',
-    price: 30,
-  },
-]
-
 export default function AppLayout({ children }: AppLayoutProps) {
+  const { items } = useCart()
+
   const [isOpen, setIsOpen] = useState(false)
 
   function handleSidePanelIsOpen() {

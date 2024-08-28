@@ -16,13 +16,19 @@ export const getStripeCheckoutSession = async ({ id }: Props) => {
   })
 
   const customerName = session.customer_details?.name
-  const product = session.line_items?.data[0].price?.product as Stripe.Product
+  const products = session.line_items?.data.map((d) => {
+    return d.price?.product as Stripe.Product
+  })
 
   return {
     customerName,
-    product: {
-      name: product.name,
-      imageUrl: product.images[0],
-    },
+    products:
+      products?.map((product) => {
+        return {
+          id: product.id,
+          name: product.name,
+          imageUrl: product.images[0],
+        }
+      }) ?? [],
   }
 }

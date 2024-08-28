@@ -1,7 +1,8 @@
 'use client'
 
-import axios from 'axios'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+import { useCart } from '@/providers/cart-provider'
 
 import { ProductProps } from '../page'
 
@@ -11,30 +12,21 @@ type Props = {
 }
 
 export default function Button({ children, product }: Props) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false)
+  const { addItem } = useCart()
+  const router = useRouter()
 
-  async function handleBuyProduct() {
-    try {
-      setIsCreatingCheckoutSession(true)
+  async function handleAddItem() {
+    addItem({
+      id: product.id,
+      imageUrl: product.imageUrl,
+      name: product.name,
+      price: product.price,
+      defaultPriceId: product.defaultPriceId,
+      quantity: 1,
+    })
 
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (err) {
-      setIsCreatingCheckoutSession(false)
-
-      alert('Falha ao redirecionar ao checkout')
-    }
+    router.push('/')
   }
 
-  return (
-    <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-      {children}
-    </button>
-  )
+  return <button onClick={handleAddItem}>{children}</button>
 }
